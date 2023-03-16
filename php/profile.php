@@ -8,7 +8,7 @@ $dbName = 'Profile_Info';
 $client = new Mongodb\Client($url);
 
 // Get the "users" collection
-$users = $client->createCollection($dbName, 'users');
+$users = $client->createCollection($dbName, 'Profile_Info');
 
 // Check if the signup form was submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
