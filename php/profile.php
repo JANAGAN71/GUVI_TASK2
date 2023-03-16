@@ -1,34 +1,29 @@
 <?php
+require 'C:\xampp\htdocs\mongodbphp\vendor\autoload.php'; 
 
-// Define MongoDB connection URL and database name
-$url = 'mongodb://localhost:27017';
-$dbName = 'Profile_Info';
+$client = new MongoDB\Client('mongodb://localhost:27017/');
+$prf_db = $client->prf_db;
+$prf_collection = $prf_db->prf_collection;
 
-// Connect to mongdb.Seeing th comment don't judge i'm copying code.It's for my understanding.
-$client = new Mongodb\Client($url);
+$prf_collection=$client->selectCollection($prf_db,'prf_collection');
 
-// Get the "users" collection
-$users = $client->createCollection($dbName, 'Profile_Info');
+if(isset($_POST['submit'])){
+    $userData=[
+        $firstname = $_POST['firstname'],
+        $lastname= $_POST['Lastname'],
+        $Mobile_Number = $_POST['Mobile_Number'],
+        $DOB= $_POST['DOB'],
+        $country = $_POST['country'],
+        $state = $_POST['state']
+    ];
 
-// Check if the signup form was submitted
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  // Get the user data from the request body
-  $userData = [
-    'firstname' => $_POST['firstname'],
-    'lastname' => $_POST['lastname'],
-    'Mobile_Number' => $_POST['Mobile_Number'],
-    'DOB' => $_POST['DOB'],
-    'country' => $_POST['country'],
-    'state' => $_POST['state'],
-  ];
+    $result=$prf_collection->insertOne($userData);
 
-  // Insert the new user
-  $result = $users->insertOne($userData);
-
-  if ($result->getInsertedCount() === 1) {
-    echo 'User created successfully';
-  } else {
-    echo 'Failed to create user';
-  }
+    if($result->getInsertedCount()==1){
+        echo'Created successfully';
+    }else{
+        echo'Failed';
 }
+}
+
 ?>
